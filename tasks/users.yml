@@ -4,6 +4,7 @@
     user: "{{ item }}"
     state: absent
   with_items: "{{ rabbitmq_users_absent }}"
+  run_once: "{{ rabbitmq_cluster }}"
 
 - name: add rabbitmq users
   rabbitmq_user:
@@ -15,3 +16,5 @@
     write_priv: "{{ item.write_priv | default('.*') }}"
     tags: "{{ item.tags | default('') }}"
   with_items: "{{ rabbitmq_users }}"
+  run_once: "{{ rabbitmq_cluster }}"
+  no_log: true
