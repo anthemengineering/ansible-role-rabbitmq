@@ -31,3 +31,9 @@ rabbitmq_yum_baseurl: https://packagecloud.io/rabbitmq/rabbitmq-server/el/7/$bas
 rabbitmq_yum_gpgcheck: false
 rabbitmq_yum_repo_gpgkey: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
 rabbitmq_yum_repo_gpgcheck: true
+
+rabbitmq_mirroring_policy:
+  name: ha
+  pattern: .*
+  tags:
+    ha-mode: all

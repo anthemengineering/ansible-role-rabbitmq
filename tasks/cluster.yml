@@ -19,4 +19,8 @@
   command: rabbitmqctl start_app
 
 - name: Configure HA policy
-  command: rabbitmqctl set_policy ha-all "." '{"ha-mode":"all"}'
+  rabbitmq_policy:
+    name: "{{ rabbitmq_mirroring_policy.name }}"
+    pattern: "{{ rabbitmq_mirroring_policy.pattern }}"
+    tags: "{{ rabbitmq_mirroring_policy.tags }}"
+  when: rabbitmq_mirroring_policy | default(false)
