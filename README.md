@@ -1,6 +1,4 @@
 # RabbitMQ Ansible Role
-Forked from https://github.com/jasonroyle/ansible-role-rabbitmq on 2018-08-20
-to support EL 7 and RabbitMQ 3.7+.
 
 ## Version
 
@@ -131,32 +129,15 @@ rabbitmq_env:
   DIST_PORT: 25672
 ```
 
-## Cluster
+## Clustering
 
-See:
+Clustering can be configured through a config file as described in [Config AutoDiscovery (RMQ doc)](https://www.rabbitmq.com/cluster-formation.html#peer-discovery-classic-config). 
+This should be more resilient than invoking `rabbitmqctl` to do clustering related operations. Use `rabbitmq_config_keys` to insert the required keys in the config.
 
-- [RabbitMQ - Clustering Guide](https://www.rabbitmq.com/clustering.html)
 
-Set the `rabbitmq_cluster` variable to enable clustering.
+/!\ Please note that AutoDiscovery only work with pristine nodes as RabbitMQ will only read this config at the very first startup.
 
-As the above clustering documentation is pretty hard to grasp I suggest reading of
-[https://computingforgeeks.com/how-to-configure-rabbitmq-cluster-on-ubuntu-18-04-lts/](https://computingforgeeks.com/how-to-configure-rabbitmq-cluster-on-ubuntu-18-04-lts/)
-for quick start. And then defined minimum variable as below where the
-  `rabbitmq1` is the short hostname of the master node.
-
-```yaml
-rabbitmq_cluster: yes
-# shortname dns only
-rabbitmq_cluster_master: "rabbit@rabbitmq1"
-```
-
-Please note that the default behaviour is:
-- The first node of the host group is the master
-- The ha policy is to replicate the queue for all nodes
-- Replacing non-master nodes is supported - just destroy the non-master node and
-  re-launch.
-- Switching master node to other node is not supported unless you have to do it
-  manually or rebuild the whole cluster.
+(You can always hard reset an existing node by removing its MnesiaDB if you don't care about its content)
 
 ### Erlang Cookie
 
