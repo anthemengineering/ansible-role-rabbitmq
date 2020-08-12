@@ -7,7 +7,7 @@
     group: rabbitmq
     mode: 0400
   notify:
-    - restart rabbitmq-server
+    - "{{ rabbitmq_restart_handler }}"
     - remove non-master-node on master
 
 - name: flush handlers
