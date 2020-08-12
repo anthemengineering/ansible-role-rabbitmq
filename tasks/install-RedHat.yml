@@ -19,4 +19,4 @@
     name: rabbitmq-server-{{ rabbitmq_version }}
     state: present
     update_cache: true
-  notify: restart rabbitmq-server
+  notify: "{{ rabbitmq_restart_handler }}"

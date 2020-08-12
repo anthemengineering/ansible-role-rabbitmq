@@ -1,4 +1,8 @@
 ---
+- name: Compute restart handler to use
+  set_fact:
+    rabbitmq_restart_handler: "{{ 'restart rabbitmq-server' if  rabbitmq_rolling_restart_batch_size | default(0, True) == 0 else 'rolling restart rabbitmq-server' }}"
+
 - include: rabbitmq.yml
   tags:
     - rabbitmq

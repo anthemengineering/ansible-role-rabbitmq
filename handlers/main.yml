@@ -4,6 +4,14 @@
     enabled: true
     state: restarted
 
+- name: rolling restart rabbitmq-server
+  service:
+    name: rabbitmq-server
+    enabled: true
+    state: restarted
+  throttle: "{{ rabbitmq_rolling_restart_batch_size | default(1, True) }}"
+
+
 - name: remove non-master-node on master
   command: "rabbitmqctl forget_cluster_node rabbit@{{ inventory_hostname_short }}"
   delegate_to: "{{ rabbitmq_cluster_master_node }}"

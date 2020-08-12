@@ -3,16 +3,16 @@
   file:
     path: /etc/rabbitmq/rabbitmq.config
     state: absent
-  notify: restart rabbitmq-server
+  notify: "{{ rabbitmq_restart_handler }}"
 - name: configure rabbitmq
   template:
     src: rabbitmq.conf.j2
     dest: /etc/rabbitmq/rabbitmq.conf
-  notify: restart rabbitmq-server
+  notify: "{{ rabbitmq_restart_handler }}"
   when: rabbitmq_config is defined
 - name: configure rabbitmq environment
   template:
     src: rabbitmq-env.conf.j2
     dest: /etc/rabbitmq/rabbitmq-env.conf
-  notify: restart rabbitmq-server
+  notify: "{{ rabbitmq_restart_handler }}"
   when: rabbitmq_env is defined
