@@ -17,6 +17,15 @@
       Pin: release o=Bintray
       Pin-Priority: 1000
 
+- name: Pin RabbitMQ version
+  copy:
+    dest: /etc/apt/preferences.d/rabbitmq
+    content: |
+      Package: rabbitmq-server
+      Pin: version {{ rabbitmq_version }}
+      Pin-Priority: 1002
+  when: rabbitmq_pin_version | bool == True
+
 - name: Add apt repository for rabbitmq
   apt_repository:
     repo: "deb https://dl.bintray.com/rabbitmq/debian {{ ansible_distribution_release }} main"
