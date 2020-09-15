@@ -20,3 +20,10 @@
 
 - name: Configure HA policy
   command: rabbitmqctl set_policy ha-all "." '{"ha-mode":"all"}'
+
+- name: Set cluster name
+  rabbitmq_global_parameter:
+    name: cluster_name
+    value: "{{ rabbitmq_cluster_name | to_json }}"
+    state: present
+  when: rabbitmq_cluster_name | default("", True) != ""
