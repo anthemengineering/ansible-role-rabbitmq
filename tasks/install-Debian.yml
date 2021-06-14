@@ -1,21 +1,39 @@
-- name: Add an apt key by id for rabbitmq
+- name: Add RabbitMQ team main signing key
   apt_key:
-    url: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+    keyserver: hkps://keys.openpgp.org
+    id: 0x0A9AF2115F4687BD29803A206B73A36E6026DFCA
     state: present
 
-- name: Add apt repository for erlang
+- name: Add Launchpad PPA key (Erlang releases)
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: F77F1EDA57EBB1CC
+    state: present
+
+- name: Add RabbitMQ team main signing key
+  apt_key:
+    url: https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey
+    state: present
+
+- name: Add apt repository for RabbitMQ
   apt_repository:
-    repo: "deb http://dl.bintray.com/rabbitmq-erlang/debian {{ ansible_distribution_release }} erlang-{{ erlang_version|default('22.x') }}"
+    repo: "deb https://packagecloud.io/rabbitmq/rabbitmq-server/ubuntu/ bionic main"
     filename: rabbitmq_erlang
     update_cache: no
 
-- name: Set package erlang preference
-  copy:
-    dest: /etc/apt/preferences.d/erlang
-    content: |
-      Package: erlang*
-      Pin: release o=Bintray
-      Pin-Priority: 1000
+- name: Add apt repository for Erlang
+  apt_repository:
+    repo: "deb http://ppa.launchpad.net/rabbitmq/rabbitmq-erlang/ubuntu bionic main"
+    filename: rabbitmq_main
+    update_cache: yes
+
+# - name: Set package erlang preference
+#   copy:
+#     dest: /etc/apt/preferences.d/erlang
+#     content: |
+#       Package: erlang*
+#       Pin: release o=Bintray
+#       Pin-Priority: 1000
 
 - name: Pin RabbitMQ version
   copy:
@@ -25,12 +43,6 @@
       Pin: version {{ rabbitmq_version }}
       Pin-Priority: 1002
   when: rabbitmq_pin_version | bool == True
-
-- name: Add apt repository for rabbitmq
-  apt_repository:
-    repo: "deb https://dl.bintray.com/rabbitmq/debian {{ ansible_distribution_release }} main"
-    filename: rabbitmq_main
-    update_cache: yes
 
 - name: Install RabbitMQ
   apt:
